@@ -1,82 +1,57 @@
-function val(id) {
-  return parseFloat(document.getElementById(id).value);
-}
+const data = [
+  {
+    name: "Rhizophora mucronata",
+    type: "Red Mangrove",
+    img: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Rhizophora_mangle.jpg",
+    desc: "High salinity tolerance. Strong coastal protection species."
+  },
+  {
+    name: "Avicennia marina",
+    type: "Grey Mangrove",
+    img: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Avicennia_marina.jpg",
+    desc: "Common in tidal flats. High adaptability."
+  },
+  {
+    name: "Sonneratia alba",
+    type: "Apple Mangrove",
+    img: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Sonneratia_alba.jpg",
+    desc: "Found in estuarine zones with strong wave exposure."
+  }
+];
 
-function hpi(elev, moist) {
-  const inundation = 1 / (1 + Math.exp(0.7 * (elev - 4)));
-  return inundation * 0.5 + (1 - elev / 10) * 0.25 + moist / 100 * 0.25;
-}
+const grid = document.getElementById("grid");
+const modal = document.getElementById("modal");
+const img = document.getElementById("img");
+const title = document.getElementById("title");
+const desc = document.getElementById("desc");
+const google = document.getElementById("google");
+const close = document.getElementById("close");
 
-function csi(ph, sal, moist, h) {
-  const soil =
-    (ph / 7) * 0.3 +
-    (1 - sal / 40) * 0.3 +
-    (moist / 100) * 0.4;
+// render cards
+data.forEach(d => {
+  const card = document.createElement("div");
+  card.className = "card";
 
-  return soil * 0.5 + h * 0.5;
-}
+  card.innerHTML = `
+    <img src="${d.img}">
+    <h3>${d.name}</h3>
+    <div class="tag">${d.type}</div>
+  `;
 
-function classify(x) {
-  if (x > 0.75) return "SUITABLE";
-  if (x > 0.35) return "MARGINAL";
-  return "UNSUITABLE";
-}
-
-/* 🌱 clickable species */
-function speciesList(type) {
-
-  const map = {
-    SUITABLE: [
-      "Rhizophora mucronata",
-      "Avicennia marina"
-    ],
-    MARGINAL: [
-      "Sonneratia alba",
-      "Bruguiera gymnorhiza"
-    ],
-    UNSUITABLE: [
-      "No dominant mangrove species"
-    ]
+  card.onclick = () => {
+    img.src = d.img;
+    title.innerText = d.name;
+    desc.innerText = d.desc;
+    google.href = `https://www.google.com/search?tbm=isch&q=${d.name}`;
+    modal.classList.remove("hidden");
   };
 
-  return map[type].map(name => {
+  grid.appendChild(card);
+});
 
-    if (name === "No dominant mangrove species") {
-      return `<div class="species">${name}</div>`;
-    }
+// close modal
+close.onclick = () => modal.classList.add("hidden");
 
-    return `
-      <div class="species"
-        onclick="window.open('https://www.google.com/search?tbm=isch&q=${encodeURIComponent(name + ' mangrove')}', '_blank')">
-        🌿 ${name}
-      </div>
-    `;
-  }).join("");
-}
-
-function runModel() {
-
-  const elev = val("elevation");
-  const ph = val("ph");
-  const sal = val("salinity");
-  const moist = val("moisture");
-
-  const h = hpi(elev, moist);
-  const x = csi(ph, sal, moist, h);
-  const cls = classify(x);
-
-  document.getElementById("hpi").innerText = h.toFixed(3);
-  document.getElementById("csi").innerText = x.toFixed(3);
-  document.getElementById("class").innerText = cls;
-
-  document.getElementById("conf").innerText =
-    (x * 100).toFixed(1) + "%";
-
-  document.getElementById("species").innerHTML =
-    speciesList(cls);
-
-  document.getElementById("values").innerHTML =
-    `E:${elev} | pH:${ph} | Sal:${sal} | M:${moist}`;
-}
-
-runModel();
+window.onclick = (e) => {
+  if (e.target === modal) modal.classList.add("hidden");
+};

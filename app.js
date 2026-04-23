@@ -1,99 +1,83 @@
-const map = L.map('map').setView([7.07, 125.6], 10);
-
-// OpenStreetMap base layer (FREE)
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 19,
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-// =========================
-// 2. MOCK CHAPTER 3 DATASET
-// (hydro + soil proxies)
-// =========================
-const dataset = [
-  { lat: 7.07, lon: 125.60, hydro: 0.92, soil: 0.81 },
-  { lat: 7.08, lon: 125.61, hydro: 0.65, soil: 0.72 },
-  { lat: 7.06, lon: 125.59, hydro: 0.30, soil: 0.40 },
-  { lat: 7.10, lon: 125.63, hydro: 0.55, soil: 0.60 },
-  { lat: 7.04, lon: 125.58, hydro: 0.20, soil: 0.25 }
-];
-
-// =========================
-// 3. CSI MODEL (Chapter 3 simplified)
-// CSI = weighted hydrology + soil
-// =========================
-function computeCSI(p) {
-  return (p.hydro * 0.6) + (p.soil * 0.4);
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
 }
 
-// Classification logic (Chapter 3 thresholds)
-function classify(csi) {
-  if (csi > 0.75) return "Suitable";
-  if (csi >= 0.35) return "Marginal";
-  return "Unsuitable";
+// Simulated sensor values
+function generateSensors() {
+  return {
+    pH: rand(5.5, 8),
+    salinity: rand(5, 40),
+    moisture: rand(30, 90),
+    temp: rand(25, 35),
+    orp: rand(100, 400)
+  };
 }
 
-// =========================
-// 4. NEAREST PIXEL SEARCH
-// (simple Euclidean proxy)
-// =========================
-function findNearest(lat, lon) {
-  let best = null;
-  let bestDist = Infinity;
+// Hydrological model (from Chapter 3 logic)
+function hydrology(sensor) {
+  const inundation = 1 / (1 + Math.exp(0.7 * (sensor.temp - 30)));
+  const coast = rand(0.4, 1);
+  const river = rand(0.3, 1);
 
-  for (const p of dataset) {
-    const dx = p.lat - lat;
-    const dy = p.lon - lon;
-    const dist = dx * dx + dy * dy;
+  const hpi =
+    inundation * 0.5 +
+    coast * 0.25 +
+    river * 0.25;
 
-    if (dist < bestDist) {
-      bestDist = dist;
-      best = p;
-    }
-  }
-
-  return best;
+  return { inundation, coast, river, hpi };
 }
 
-// =========================
-// 5. MAP CLICK INTERACTION
-// =========================
-map.on('click', (e) => {
-  const { lat, lng } = e.latlng;
+// Simple ML rule engine (Random Forest simulation logic)
+function classify(hpi, sensor) {
 
-  const point = findNearest(lat, lng);
-  const csi = computeCSI(point);
-  const result = classify(csi);
+  let score =
+    hpi * 0.5 +
+    (sensor.pH > 6 && sensor.pH < 7.5 ? 0.2 : 0.1) +
+    (sensor.salinity < 25 ? 0.2 : 0.05) +
+    (sensor.moisture > 50 ? 0.1 : 0.05);
+
+  let label = "Unsuitable";
+
+  if (score > 0.75) label = "Suitable";
+  else if (score > 0.45) label = "Marginal";
+
+  return { score, label };
+}
+
+function runSimulation() {
+
+  const sensor = generateSensors();
+  const hydro = hydrology(sensor);
+  const ml = classify(hydro.hpi, sensor);
 
   // UI update
-  document.getElementById("info").innerHTML = `
-    <b>Site Analysis Result</b><br/>
-    Classification: <b>${result}</b><br/>
-    CSI Score: ${csi.toFixed(2)}<br/>
-    Hydro Index: ${point.hydro}<br/>
-    Soil Index: ${point.soil}
+  document.getElementById("sensors").innerHTML = `
+    pH: ${sensor.pH.toFixed(2)}<br>
+    Salinity: ${sensor.salinity.toFixed(2)}<br>
+    Moisture: ${sensor.moisture.toFixed(2)}<br>
+    Temperature: ${sensor.temp.toFixed(2)}<br>
+    ORP: ${sensor.orp.toFixed(2)}
   `;
 
-  // marker output
-  L.marker([point.lat, point.lon])
-    .addTo(map)
-    .bindPopup(`
-      <b>${result}</b><br/>
-      CSI: ${csi.toFixed(2)}
-    `)
-    .openPopup();
-});
+  document.getElementById("hydro").innerHTML = `
+    Inundation: ${hydro.inundation.toFixed(2)}<br>
+    Coast Influence: ${hydro.coast.toFixed(2)}<br>
+    River Influence: ${hydro.river.toFixed(2)}<br>
+    HPI: ${hydro.hpi.toFixed(2)}
+  `;
 
-// =========================
-// 6. OPTIONAL: PREVIEW MARKERS
-// =========================
-dataset.forEach(p => {
-  const csi = computeCSI(p);
-  const label = classify(csi);
+  document.getElementById("result").innerHTML = `
+    <h3>${ml.label}</h3>
+    Confidence: ${(ml.score * 100).toFixed(1)}%
+  `;
 
-  L.circleMarker([p.lat, p.lon], {
-    radius: 6
-  })
-    .addTo(map)
-    .bindPopup(`${label} (CSI: ${csi.toFixed(2)})`);
-});
+  document.getElementById("explain").innerHTML = `
+    • Hydrology contributes strongly to classification<br>
+    • Soil pH and salinity influence suitability<br>
+    • Higher HPI increases mangrove viability<br>
+    • Model simulates Random Forest logic (Chapter 3)
+  `;
+}
+
+// auto-run once
+runSimulation();

@@ -9,13 +9,13 @@ const data = [
     name: "Avicennia marina",
     type: "Grey Mangrove",
     img: "https://upload.wikimedia.org/wikipedia/commons/3/3f/Avicennia_marina.jpg",
-    desc: "Common in tidal flats. High adaptability."
+    desc: "Highly adaptive species found in tidal flats."
   },
   {
     name: "Sonneratia alba",
     type: "Apple Mangrove",
     img: "https://upload.wikimedia.org/wikipedia/commons/4/4a/Sonneratia_alba.jpg",
-    desc: "Found in estuarine zones with strong wave exposure."
+    desc: "Thrives in estuarine wave-exposed zones."
   }
 ];
 
@@ -27,7 +27,7 @@ const desc = document.getElementById("desc");
 const google = document.getElementById("google");
 const close = document.getElementById("close");
 
-// render cards
+/* RENDER CARDS */
 data.forEach(d => {
   const card = document.createElement("div");
   card.className = "card";
@@ -38,20 +38,21 @@ data.forEach(d => {
     <div class="tag">${d.type}</div>
   `;
 
-  card.onclick = () => {
+  card.addEventListener("click", () => {
+    modal.classList.add("show");
+
     img.src = d.img;
-    title.innerText = d.name;
-    desc.innerText = d.desc;
+    title.textContent = d.name;
+    desc.textContent = d.desc;
     google.href = `https://www.google.com/search?tbm=isch&q=${d.name}`;
-    modal.classList.remove("hidden");
-  };
+  });
 
   grid.appendChild(card);
 });
 
-// close modal
-close.onclick = () => modal.classList.add("hidden");
+/* CLOSE */
+close.onclick = () => modal.classList.remove("show");
 
-window.onclick = (e) => {
-  if (e.target === modal) modal.classList.add("hidden");
+modal.onclick = (e) => {
+  if (e.target === modal) modal.classList.remove("show");
 };

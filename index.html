@@ -1,176 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bakhaw AI | Mangrove Suitability System</title>
+<meta charset="UTF-8">
+<title>Bakhaw AI Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Leaflet CSS (FREE MAP LIBRARY) -->
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  />
-
-  <style>
-    :root {
-      --c1: #ABC9B9;
-      --c2: #305066;
-      --c3: #5E929E;
-      --c4: #E1EABB;
-      --c5: #A6C1E2;
-      --c6: #B2AE77;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, Arial, sans-serif;
-      background: var(--c2);
-    }
-
-    #map {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 100%;
-    }
-
-    .panel {
-      position: absolute;
-      top: 18px;
-      left: 18px;
-      width: 280px;
-      background: rgba(255, 255, 255, 0.95);
-      padding: 14px;
-      border-radius: 14px;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      border-left: 6px solid var(--c3);
-      z-index: 999;
-    }
-
-    .panel h2 {
-      margin: 0 0 8px;
-      color: var(--c2);
-      font-size: 18px;
-    }
-
-    .panel p {
-      margin: 6px 0;
-      font-size: 13px;
-      color: #333;
-    }
-
-    .legend {
-      margin-top: 10px;
-      font-size: 12px;
-    }
-
-    .dot {
-      height: 10px;
-      width: 10px;
-      border-radius: 50%;
-      display: inline-block;
-      margin-right: 6px;
-    }
-
-    .suitable { background: var(--c1); }
-    .marginal { background: var(--c6); }
-    .unsuitable { background: var(--c5); }
-  </style>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- MAP CONTAINER -->
-<div id="map"></div>
+<div class="container">
 
-<!-- UI PANEL -->
-<div class="panel">
-  <h2>Bakhaw AI</h2>
-  <p id="info">Click anywhere on the map to evaluate site suitability.</p>
-
-  <div class="legend">
-    <p><span class="dot suitable"></span> Suitable</p>
-    <p><span class="dot marginal"></span> Marginal</p>
-    <p><span class="dot unsuitable"></span> Unsuitable</p>
+  <div class="header">
+    <h1>Bakhaw AI System</h1>
+    <p>AIoT Mangrove Suitability Dashboard</p>
   </div>
+
+  <div class="grid">
+
+    <!-- Sensor Panel -->
+    <div class="card">
+      <h2>Field Sensors</h2>
+      <div id="sensors"></div>
+    </div>
+
+    <!-- Hydrology -->
+    <div class="card">
+      <h2>Hydrological Prior</h2>
+      <div id="hydro"></div>
+    </div>
+
+    <!-- ML Output -->
+    <div class="card result">
+      <h2>Suitability Result</h2>
+      <div id="result"></div>
+    </div>
+
+    <!-- Explainability -->
+    <div class="card">
+      <h2>Explainability</h2>
+      <div id="explain"></div>
+    </div>
+
+  </div>
+
+  <button onclick="runSimulation()">Run Analysis</button>
+
 </div>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script>
-  // =========================
-  // 1. INITIALIZE MAP
-  // =========================
-  const map = L.map('map').setView([7.07, 125.6], 10); // Davao region
-
-  // OpenStreetMap tiles (FREE)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
-
-  // =========================
-  // 2. SAMPLE CHAPTER 3 DATA
-  // =========================
-  const data = [
-    { lat: 7.07, lon: 125.60, hydro: 0.9, soil: 0.8 },
-    { lat: 7.08, lon: 125.61, hydro: 0.6, soil: 0.7 },
-    { lat: 7.06, lon: 125.59, hydro: 0.3, soil: 0.4 }
-  ];
-
-  // =========================
-  // 3. CSI-BASED CLASSIFICATION
-  // =========================
-  function classify(p) {
-    const score = (p.hydro * 0.6) + (p.soil * 0.4);
-
-    if (score > 0.75) return "Suitable";
-    if (score > 0.35) return "Marginal";
-    return "Unsuitable";
-  }
-
-  // =========================
-  // 4. NEAREST PIXEL SEARCH
-  // =========================
-  function findNearest(lat, lon) {
-    let best = null;
-    let bestDist = Infinity;
-
-    for (const p of data) {
-      const d = (p.lat - lat)**2 + (p.lon - lon)**2;
-
-      if (d < bestDist) {
-        bestDist = d;
-        best = p;
-      }
-    }
-
-    return best;
-  }
-
-  // =========================
-  // 5. MAP CLICK EVENT
-  // =========================
-  map.on('click', (e) => {
-    const { lat, lng } = e.latlng;
-
-    const p = findNearest(lat, lng);
-    const result = classify(p);
-
-    document.getElementById("info").innerHTML = `
-      <b>Site Analysis Result</b><br/>
-      Status: ${result}<br/>
-      Hydrology Index: ${p.hydro}<br/>
-      Soil Index: ${p.soil}
-    `;
-
-    L.marker([p.lat, p.lon])
-      .addTo(map)
-      .bindPopup(`<b>${result}</b>`)
-      .openPopup();
-  });
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>

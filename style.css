@@ -1,33 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bakhaw AI | Mangrove Suitability Map</title>
+:root {
+  --c1: #ABC9B9;
+  --c2: #305066;
+  --c3: #5E929E;
+  --c4: #E1EABB;
+  --c5: #A6C1E2;
+  --c6: #B2AE77;
+}
 
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  background: var(--c2);
+}
 
-  <link rel="stylesheet" href="style.css"/>
-</head>
-<body>
+/* MAP CONTAINER */
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
 
-<div id="map"></div>
+/* INFO PANEL */
+.panel {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 14px;
+  border-radius: 14px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  border-left: 6px solid var(--c3);
+  z-index: 999;
+}
 
-<div class="panel">
-  <h2>Bakhaw AI</h2>
-  <p id="info">Click a location to evaluate suitability</p>
+/* TITLE */
+.panel h2 {
+  margin: 0 0 8px;
+  color: var(--c2);
+  font-size: 18px;
+}
 
-  <div class="legend">
-    <span class="dot suitable"></span> Suitable  
-    <span class="dot marginal"></span> Marginal  
-    <span class="dot unsuitable"></span> Unsuitable  
-  </div>
-</div>
+/* TEXT */
+.panel p {
+  margin: 6px 0;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.4;
+}
 
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+/* LEGEND */
+.legend {
+  margin-top: 10px;
+  font-size: 12px;
+}
 
-<script src="config.js"></script>
-<script src="app.js"></script>
+.dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
 
-</body>
-</html>
+.suitable { background: var(--c1); }
+.marginal { background: var(--c6); }
+.unsuitable { background: var(--c5); }

@@ -1,65 +1,69 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bakhaw AI System Interface</title>
+<title>Bakhaw AI System</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="grid">
+<div class="layout">
 
-  <!-- LEFT PANEL -->
-  <div class="panel left">
-    <h2>System Status</h2>
+  <!-- INPUT -->
+  <div class="panel input">
+    <h2>Environmental Inputs</h2>
 
-    <div class="box">
-      <p>Data Pipeline: <span class="ok">ACTIVE</span></p>
-      <p>Model: Random Forest (Frozen)</p>
-      <p>Sensor Feed: SIMULATED STATIC</p>
-      <p>Geospatial Layer: LOADED</p>
-    </div>
+    <label>Elevation</label>
+    <input id="elevation" type="range" min="0" max="10" step="0.1" oninput="runModel()">
+
+    <label>Soil pH</label>
+    <input id="ph" type="range" min="4" max="9" step="0.1" oninput="runModel()">
+
+    <label>Salinity</label>
+    <input id="salinity" type="range" min="0" max="40" step="1" oninput="runModel()">
+
+    <label>Moisture</label>
+    <input id="moisture" type="range" min="0" max="100" step="1" oninput="runModel()">
+
+    <div id="values"></div>
   </div>
 
-  <!-- CENTER PANEL -->
-  <div class="panel center">
-    <h2>Environmental Snapshot</h2>
+  <!-- OUTPUT -->
+  <div class="panel output">
 
-    <div class="box">
-      <p>Hydrological Prior Index: <b>0.68</b></p>
-      <p>Inundation Probability: <b>0.74</b></p>
-      <p>Soil pH: <b>6.8</b></p>
-      <p>Salinity Proxy: <b>0.42</b></p>
-      <p>Moisture Index: <b>0.61</b></p>
-      <p>Elevation: <b>3.9 m</b></p>
-    </div>
-
-    <div class="box">
-      <p>Continuous Suitability Index (CSI):</p>
-      <h1>0.71</h1>
-    </div>
-  </div>
-
-  <!-- RIGHT PANEL -->
-  <div class="panel right">
     <h2>Model Output</h2>
 
-    <div class="box">
-      <h3>CLASSIFICATION</h3>
-      <h2 class="status">MARGINAL</h2>
-
-      <p>Confidence Score: <b>78.4%</b></p>
-      <p>Recommended Species:</p>
-      <ul>
-        <li>Rhizophora mucronata</li>
-        <li>Avicennia marina</li>
-      </ul>
+    <div class="card">
+      <p>Hydrological Prior Index</p>
+      <h3 id="hpi"></h3>
     </div>
+
+    <div class="card highlight">
+      <p>CSI</p>
+      <h1 id="csi"></h1>
+    </div>
+
+    <div class="card">
+      <p>Classification</p>
+      <h2 id="class"></h2>
+    </div>
+
+    <div class="card">
+      <p>Confidence</p>
+      <h3 id="conf"></h3>
+    </div>
+
+    <div class="card">
+      <p>Recommended Species</p>
+      <div id="species"></div>
+    </div>
+
   </div>
 
 </div>
 
+<script src="app.js"></script>
 </body>
 </html>

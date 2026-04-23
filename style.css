@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bakhaw AI | Mangrove Suitability Map</title>
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="panel">
+  <h2>Bakhaw AI</h2>
+  <p id="info">Click a location to evaluate suitability</p>
+
+  <div class="legend">
+    <span class="dot suitable"></span> Suitable  
+    <span class="dot marginal"></span> Marginal  
+    <span class="dot unsuitable"></span> Unsuitable  
+  </div>
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,67 +1,31 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bakhaw AI System</title>
+<title>Bakhaw AI Species Explorer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="layout">
+<header>
+  <h1>Bakhaw AI</h1>
+  <p>Mangrove Species Intelligence Explorer</p>
+</header>
 
-  <!-- INPUT -->
-  <div class="panel input">
-    <h2>Environmental Inputs</h2>
+<div class="container" id="grid"></div>
 
-    <label>Elevation</label>
-    <input id="elevation" type="range" min="0" max="10" step="0.1" oninput="runModel()">
-
-    <label>Soil pH</label>
-    <input id="ph" type="range" min="4" max="9" step="0.1" oninput="runModel()">
-
-    <label>Salinity</label>
-    <input id="salinity" type="range" min="0" max="40" step="1" oninput="runModel()">
-
-    <label>Moisture</label>
-    <input id="moisture" type="range" min="0" max="100" step="1" oninput="runModel()">
-
-    <div id="values"></div>
+<!-- MODAL -->
+<div id="modal" class="modal hidden">
+  <div class="modal-content">
+    <span id="close">&times;</span>
+    <img id="img" />
+    <h2 id="title"></h2>
+    <p id="desc"></p>
+    <a id="google" target="_blank">🔍 Search on Google</a>
   </div>
-
-  <!-- OUTPUT -->
-  <div class="panel output">
-
-    <h2>Model Output</h2>
-
-    <div class="card">
-      <p>Hydrological Prior Index</p>
-      <h3 id="hpi"></h3>
-    </div>
-
-    <div class="card highlight">
-      <p>CSI</p>
-      <h1 id="csi"></h1>
-    </div>
-
-    <div class="card">
-      <p>Classification</p>
-      <h2 id="class"></h2>
-    </div>
-
-    <div class="card">
-      <p>Confidence</p>
-      <h3 id="conf"></h3>
-    </div>
-
-    <div class="card">
-      <p>Recommended Species</p>
-      <div id="species"></div>
-    </div>
-
-  </div>
-
 </div>
 
 <script src="app.js"></script>

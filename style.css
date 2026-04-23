@@ -14,38 +14,36 @@ body {
   color: white;
 }
 
-.container {
-  padding: 20px;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  grid-template-columns: 1fr 2fr 1fr;
+  height: 100vh;
+  gap: 10px;
+  padding: 10px;
 }
 
-.card {
-  background: rgba(255,255,255,0.08);
-  padding: 15px;
+.panel {
+  background: rgba(255,255,255,0.06);
   border-radius: 12px;
-  backdrop-filter: blur(8px);
+  padding: 15px;
 }
 
-.result {
-  border: 2px solid var(--c1);
+.box {
+  background: rgba(255,255,255,0.08);
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
 }
 
-button {
-  margin-top: 20px;
-  padding: 10px 15px;
-  background: var(--c1);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
+h2 {
+  margin: 0;
+  color: var(--c1);
+}
+
+.status {
+  color: var(--c4);
+}
+
+.ok {
+  color: var(--c1);
 }

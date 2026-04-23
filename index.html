@@ -2,53 +2,64 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Bakhaw AI Dashboard</title>
+<title>Bakhaw AI System Interface</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
+<div class="grid">
 
-  <div class="header">
-    <h1>Bakhaw AI System</h1>
-    <p>AIoT Mangrove Suitability Dashboard</p>
+  <!-- LEFT PANEL -->
+  <div class="panel left">
+    <h2>System Status</h2>
+
+    <div class="box">
+      <p>Data Pipeline: <span class="ok">ACTIVE</span></p>
+      <p>Model: Random Forest (Frozen)</p>
+      <p>Sensor Feed: SIMULATED STATIC</p>
+      <p>Geospatial Layer: LOADED</p>
+    </div>
   </div>
 
-  <div class="grid">
+  <!-- CENTER PANEL -->
+  <div class="panel center">
+    <h2>Environmental Snapshot</h2>
 
-    <!-- Sensor Panel -->
-    <div class="card">
-      <h2>Field Sensors</h2>
-      <div id="sensors"></div>
+    <div class="box">
+      <p>Hydrological Prior Index: <b>0.68</b></p>
+      <p>Inundation Probability: <b>0.74</b></p>
+      <p>Soil pH: <b>6.8</b></p>
+      <p>Salinity Proxy: <b>0.42</b></p>
+      <p>Moisture Index: <b>0.61</b></p>
+      <p>Elevation: <b>3.9 m</b></p>
     </div>
 
-    <!-- Hydrology -->
-    <div class="card">
-      <h2>Hydrological Prior</h2>
-      <div id="hydro"></div>
+    <div class="box">
+      <p>Continuous Suitability Index (CSI):</p>
+      <h1>0.71</h1>
     </div>
-
-    <!-- ML Output -->
-    <div class="card result">
-      <h2>Suitability Result</h2>
-      <div id="result"></div>
-    </div>
-
-    <!-- Explainability -->
-    <div class="card">
-      <h2>Explainability</h2>
-      <div id="explain"></div>
-    </div>
-
   </div>
 
-  <button onclick="runSimulation()">Run Analysis</button>
+  <!-- RIGHT PANEL -->
+  <div class="panel right">
+    <h2>Model Output</h2>
+
+    <div class="box">
+      <h3>CLASSIFICATION</h3>
+      <h2 class="status">MARGINAL</h2>
+
+      <p>Confidence Score: <b>78.4%</b></p>
+      <p>Recommended Species:</p>
+      <ul>
+        <li>Rhizophora mucronata</li>
+        <li>Avicennia marina</li>
+      </ul>
+    </div>
+  </div>
 
 </div>
 
-<script src="app.js"></script>
 </body>
 </html>

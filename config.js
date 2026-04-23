@@ -1,1 +1,0 @@
-mapboxgl.accessToken = "YOUR_MAPBOX_TOKEN";

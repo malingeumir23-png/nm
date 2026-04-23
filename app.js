@@ -1,40 +1,53 @@
-const map = new mapboxgl.Map({
-  container: "map",
-  style: "mapbox://styles/mapbox/light-v11",
-  center: [125.6, 7.07],
-  zoom: 9
-});
+const map = L.map('map').setView([7.07, 125.6], 10);
 
-let data = [];
+// OpenStreetMap base layer (FREE)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 
-fetch("data/mangrove_points.json")
-  .then(res => res.json())
-  .then(d => data = d);
+// =========================
+// 2. MOCK CHAPTER 3 DATASET
+// (hydro + soil proxies)
+// =========================
+const dataset = [
+  { lat: 7.07, lon: 125.60, hydro: 0.92, soil: 0.81 },
+  { lat: 7.08, lon: 125.61, hydro: 0.65, soil: 0.72 },
+  { lat: 7.06, lon: 125.59, hydro: 0.30, soil: 0.40 },
+  { lat: 7.10, lon: 125.63, hydro: 0.55, soil: 0.60 },
+  { lat: 7.04, lon: 125.58, hydro: 0.20, soil: 0.25 }
+];
 
-// fast local inference (proxy-based CSI logic simplified)
-function computeSuitability(point) {
-  const score =
-    (point.hydro * 0.5) +
-    (point.soil * 0.3) +
-    (point.water * 0.2);
+// =========================
+// 3. CSI MODEL (Chapter 3 simplified)
+// CSI = weighted hydrology + soil
+// =========================
+function computeCSI(p) {
+  return (p.hydro * 0.6) + (p.soil * 0.4);
+}
 
-  if (score > 0.75) return "Suitable";
-  if (score > 0.35) return "Marginal";
+// Classification logic (Chapter 3 thresholds)
+function classify(csi) {
+  if (csi > 0.75) return "Suitable";
+  if (csi >= 0.35) return "Marginal";
   return "Unsuitable";
 }
 
-// nearest lookup (lightweight)
-function nearest(lon, lat) {
+// =========================
+// 4. NEAREST PIXEL SEARCH
+// (simple Euclidean proxy)
+// =========================
+function findNearest(lat, lon) {
   let best = null;
   let bestDist = Infinity;
 
-  for (const p of data) {
-    const dx = p.lon - lon;
-    const dy = p.lat - lat;
-    const d = dx * dx + dy * dy;
+  for (const p of dataset) {
+    const dx = p.lat - lat;
+    const dy = p.lon - lon;
+    const dist = dx * dx + dy * dy;
 
-    if (d < bestDist) {
-      bestDist = d;
+    if (dist < bestDist) {
+      bestDist = dist;
       best = p;
     }
   }
@@ -42,25 +55,45 @@ function nearest(lon, lat) {
   return best;
 }
 
-map.on("click", (e) => {
-  const { lng, lat } = e.lngLat;
+// =========================
+// 5. MAP CLICK INTERACTION
+// =========================
+map.on('click', (e) => {
+  const { lat, lng } = e.latlng;
 
-  const p = nearest(lng, lat);
+  const point = findNearest(lat, lng);
+  const csi = computeCSI(point);
+  const result = classify(csi);
 
-  if (!p) return;
-
-  const status = computeSuitability(p);
-
+  // UI update
   document.getElementById("info").innerHTML = `
-    <b>Site Analysis</b><br/>
-    Status: ${status}<br/>
-    Hydrology: ${p.hydro}<br/>
-    Soil: ${p.soil}<br/>
-    Water: ${p.water}
+    <b>Site Analysis Result</b><br/>
+    Classification: <b>${result}</b><br/>
+    CSI Score: ${csi.toFixed(2)}<br/>
+    Hydro Index: ${point.hydro}<br/>
+    Soil Index: ${point.soil}
   `;
 
-  new mapboxgl.Popup()
-    .setLngLat([p.lon, p.lat])
-    .setHTML(`<b>${status}</b>`)
-    .addTo(map);
+  // marker output
+  L.marker([point.lat, point.lon])
+    .addTo(map)
+    .bindPopup(`
+      <b>${result}</b><br/>
+      CSI: ${csi.toFixed(2)}
+    `)
+    .openPopup();
+});
+
+// =========================
+// 6. OPTIONAL: PREVIEW MARKERS
+// =========================
+dataset.forEach(p => {
+  const csi = computeCSI(p);
+  const label = classify(csi);
+
+  L.circleMarker([p.lat, p.lon], {
+    radius: 6
+  })
+    .addTo(map)
+    .bindPopup(`${label} (CSI: ${csi.toFixed(2)})`);
 });

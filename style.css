@@ -10,40 +10,57 @@
 body {
   margin: 0;
   font-family: system-ui;
-  background: var(--c2);
+  background: radial-gradient(circle at top, #305066, #1c2f3d);
   color: white;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+.layout {
+  display: flex;
   height: 100vh;
-  gap: 10px;
-  padding: 10px;
+  gap: 12px;
+  padding: 12px;
 }
 
+/* panels */
 .panel {
+  flex: 1;
   background: rgba(255,255,255,0.06);
-  border-radius: 12px;
-  padding: 15px;
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
-.box {
+/* cards */
+.card {
   background: rgba(255,255,255,0.08);
   padding: 12px;
-  border-radius: 10px;
   margin-top: 10px;
+  border-radius: 12px;
+  transition: 0.2s ease;
 }
 
-h2 {
-  margin: 0;
-  color: var(--c1);
+.card:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.12);
 }
 
-.status {
-  color: var(--c4);
+/* highlight CSI */
+.highlight {
+  border: 1px solid var(--c1);
 }
 
-.ok {
-  color: var(--c1);
+/* species items */
+.species {
+  padding: 8px;
+  margin-top: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  transition: 0.2s;
+}
+
+.species:hover {
+  background: var(--c3);
+  transform: scale(1.02);
 }

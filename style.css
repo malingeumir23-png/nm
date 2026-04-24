@@ -1,114 +1,151 @@
 :root {
-  --green: #0B3D2E;     /* forest green base */
-  --dark: #111111;
-  --yellow: #FFCC00;    /* NatGeo accent */
+  --green: #0B3D2E;
+  --dark: #0f1110;
+  --panel: rgba(0,0,0,0.55);
+  --yellow: #FFCC00;
   --white: #ffffff;
-  --gray: #aaaaaa;
+  --muted: #b8b8b8;
 }
 
+/* GLOBAL */
 body {
   margin: 0;
-  font-family: system-ui, Arial;
-  background: var(--green);
+  font-family: system-ui, -apple-system, Segoe UI, Arial;
+  background: radial-gradient(circle at top, #145c42, var(--green));
   color: var(--white);
 }
 
-/* layout */
-.container {
-  padding: 20px;
-  max-width: 1100px;
-  margin: auto;
-}
-
-/* header */
-.header {
-  border: 2px solid var(--yellow);
-  padding: 15px;
-  margin-bottom: 20px;
-  background: rgba(0,0,0,0.4);
-}
-
-.header h1 {
-  margin: 0;
-  letter-spacing: 3px;
-  color: var(--yellow);
-}
-
-/* grid */
-.grid {
+/* APP LAYOUT */
+.app {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
+  grid-template-columns: 320px 1fr;
+  height: 100vh;
 }
 
-/* cards */
-.card {
-  background: var(--dark);
-  padding: 15px;
-  border: 1px solid var(--yellow);
-  border-radius: 12px;
+/* SIDEBAR */
+.sidebar {
+  background: var(--panel);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255,204,0,0.2);
+  padding: 20px;
 }
 
-.card h2 {
+/* BRAND */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--yellow);
+  border-radius: 50%;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 18px;
   color: var(--yellow);
-  margin-top: 0;
+  letter-spacing: 2px;
 }
 
-.full {
-  margin-top: 15px;
+.brand p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
 }
 
-/* inputs */
+/* INPUT */
+.inputBox label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
 input {
   width: 100%;
   padding: 10px;
-  margin: 6px 0;
-  border: 1px solid var(--yellow);
-  background: #000;
+  margin: 6px 0 12px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,204,0,0.3);
   color: white;
+  border-radius: 8px;
   outline: none;
 }
 
 button {
   width: 100%;
-  padding: 10px;
+  padding: 11px;
   background: var(--yellow);
   border: none;
+  font-weight: 600;
   cursor: pointer;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-button:hover {
-  opacity: 0.85;
-}
-
-/* species */
-.species-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.species {
-  padding: 12px;
-  border: 1px solid var(--yellow);
-  cursor: pointer;
-  text-align: center;
+  border-radius: 8px;
   transition: 0.2s;
 }
 
-.species:hover {
+button:hover {
+  transform: translateY(-2px);
+}
+
+/* MAIN */
+.main {
+  padding: 25px;
+  display: grid;
+  gap: 20px;
+}
+
+/* CARDS */
+.card {
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,204,0,0.15);
+  border-radius: 16px;
+  padding: 18px;
+  backdrop-filter: blur(10px);
+}
+
+.hero {
+  border-left: 5px solid var(--yellow);
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--yellow);
+}
+
+/* RESULT */
+.result {
+  font-size: 15px;
+  color: var(--white);
+}
+
+/* SPECIES GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.tile {
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,204,0,0.25);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  transition: 0.25s;
+  text-align: center;
+}
+
+.tile:hover {
   background: var(--yellow);
   color: black;
+  transform: translateY(-3px);
 }
 
-/* result highlight */
-.highlight {
-  border-left: 6px solid var(--yellow);
-}
-
-.hint {
-  font-size: 12px;
-  color: var(--gray);
+.note {
+  margin-top: 20px;
+  font-size: 11px;
+  color: var(--muted);
 }

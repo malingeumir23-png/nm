@@ -1,79 +1,93 @@
 body {
   margin: 0;
-  font-family: system-ui;
-  background: linear-gradient(135deg, #ffd1dc, #ff69b4);
-  color: #2b2b2b;
+  font-family: 'Sora', sans-serif;
+  background: linear-gradient(180deg, #ff69b4, #ffd1dc);
+  color: #1f1f1f;
 }
 
-.bg-glow {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at top, #ffb6c1, transparent 60%);
-  z-index: -1;
-}
-
-.container {
-  max-width: 900px;
+/* APP CONTAINER */
+.app {
+  padding: 16px;
+  max-width: 480px;
   margin: auto;
-  padding: 20px;
 }
 
-header {
-  text-align: center;
+/* TOP BAR */
+.topbar {
   color: white;
+  padding: 20px 10px;
 }
 
-/* PANEL */
-.panel, .result-box, .species-box {
+.topbar h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* CARD UI (mobile-native feel) */
+.card {
   background: rgba(255,255,255,0.88);
-  padding: 18px;
-  margin: 15px 0;
-  border-radius: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 14px;
+
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
 }
 
-/* SLIDERS */
+/* CONTROL BLOCK */
+.control {
+  margin-bottom: 18px;
+}
+
+label {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* SLIDER MOBILE OPTIMIZED */
 input[type="range"] {
   width: 100%;
+  margin-top: 8px;
   accent-color: #ff1493;
-  margin: 8px 0;
 }
 
 span {
-  font-weight: bold;
+  display: inline-block;
+  margin-top: 4px;
+  font-weight: 700;
   color: #ff1493;
 }
 
-/* BUTTON */
+/* BUTTON (thumb-friendly) */
 button {
   width: 100%;
-  padding: 12px;
+  padding: 16px;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #ff1493;
   color: white;
-  font-weight: bold;
-  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
 }
 
-button:hover {
-  background: #ff69b4;
+/* RESULT */
+.result {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
 }
 
 /* SPECIES */
 .species-card {
   background: white;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-top: 10px;
-  cursor: pointer;
+
   border-left: 6px solid #ff69b4;
-  transition: 0.2s;
+  font-size: 14px;
 }
 
-.species-card:hover {
-  transform: scale(1.02);
-  background: #ffe4f1;
+.species-card:active {
+  transform: scale(0.98);
 }

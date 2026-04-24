@@ -1,82 +1,136 @@
-function val(id) {
-  return parseFloat(document.getElementById(id).value);
+mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/mapbox/satellite-streets-v12',
+  center: [125.6, 7.07],
+  zoom: 10
+});
+
+// DATA
+let mangroveData = [];
+
+// LOAD DATA
+fetch('data/mangrove_points.json')
+  .then(res => res.json())
+  .then(data => {
+    mangroveData = data;
+  });
+
+// MARKERS STORAGE
+let markers = [];
+
+// CREATE MARKERS
+function renderMangroves() {
+  mangroveData.forEach(p => {
+    const el = document.createElement('div');
+    el.style.width = "10px";
+    el.style.height = "10px";
+    el.style.background = "#FFCC00";
+    el.style.borderRadius = "50%";
+
+    const marker = new mapboxgl.Marker(el)
+      .setLngLat([p.lon, p.lat])
+      .addTo(map);
+
+    markers.push(marker);
+  });
 }
 
-function hpi(elev, moist) {
-  const inundation = 1 / (1 + Math.exp(0.7 * (elev - 4)));
-  return inundation * 0.5 + (1 - elev / 10) * 0.25 + moist / 100 * 0.25;
+// CLEAR MARKERS
+function clearMarkers() {
+  markers.forEach(m => m.remove());
+  markers = [];
 }
 
-function csi(ph, sal, moist, h) {
-  const soil =
-    (ph / 7) * 0.3 +
-    (1 - sal / 40) * 0.3 +
-    (moist / 100) * 0.4;
+// INITIAL RENDER
+map.on('load', () => {
+  renderMangroves();
+});
 
-  return soil * 0.5 + h * 0.5;
-}
+// CLICK INTERACTION (UNCHANGED LOGIC + INSPECTOR)
+map.on('click', (e) => {
+  const { lng, lat } = e.lngLat;
 
-function classify(x) {
-  if (x > 0.75) return "SUITABLE";
-  if (x > 0.35) return "MARGINAL";
-  return "UNSUITABLE";
-}
+  let closest = null;
+  let minDist = Infinity;
 
-/* 🌱 clickable species */
-function speciesList(type) {
+  mangroveData.forEach(p => {
+    const dx = p.lon - lng;
+    const dy = p.lat - lat;
+    const d = dx*dx + dy*dy;
 
-  const map = {
-    SUITABLE: [
-      "Rhizophora mucronata",
-      "Avicennia marina"
-    ],
-    MARGINAL: [
-      "Sonneratia alba",
-      "Bruguiera gymnorhiza"
-    ],
-    UNSUITABLE: [
-      "No dominant mangrove species"
-    ]
-  };
-
-  return map[type].map(name => {
-
-    if (name === "No dominant mangrove species") {
-      return `<div class="species">${name}</div>`;
+    if (d < minDist) {
+      minDist = d;
+      closest = p;
     }
+  });
 
-    return `
-      <div class="species"
-        onclick="window.open('https://www.google.com/search?tbm=isch&q=${encodeURIComponent(name + ' mangrove')}', '_blank')">
-        🌿 ${name}
-      </div>
-    `;
-  }).join("");
-}
+  if (!closest) return;
 
-function runModel() {
+  document.getElementById("inspector").classList.remove("hidden");
 
-  const elev = val("elevation");
-  const ph = val("ph");
-  const sal = val("salinity");
-  const moist = val("moisture");
+  document.getElementById("speciesName").innerText = closest.species;
+  document.getElementById("speciesInfo").innerText =
+    "Mangrove species adapted to intertidal coastal ecosystems.";
 
-  const h = hpi(elev, moist);
-  const x = csi(ph, sal, moist, h);
-  const cls = classify(x);
+  document.getElementById("salinity").innerText = closest.salinity;
 
-  document.getElementById("hpi").innerText = h.toFixed(3);
-  document.getElementById("csi").innerText = x.toFixed(3);
-  document.getElementById("class").innerText = cls;
+  document.getElementById("speciesImage").src =
+    "https://upload.wikimedia.org/wikipedia/commons/5/5f/Mangrove_forest.jpg";
+});
 
-  document.getElementById("conf").innerText =
-    (x * 100).toFixed(1) + "%";
+// -------------------------
+// LAYER CONTROLS (NEW SYSTEM)
+// -------------------------
 
-  document.getElementById("species").innerHTML =
-    speciesList(cls);
+document.getElementById("layerMangrove").addEventListener("change", (e) => {
+  if (e.target.checked) {
+    renderMangroves();
+  } else {
+    clearMarkers();
+  }
+});
 
-  document.getElementById("values").innerHTML =
-    `E:${elev} | pH:${ph} | Sal:${sal} | M:${moist}`;
-}
+// SALINITY LAYER (visual proxy overlay)
+let salinityLayerAdded = false;
 
-runModel();
+document.getElementById("layerSalinity").addEventListener("change", (e) => {
+  if (e.target.checked) {
+    if (!salinityLayerAdded) {
+      map.addSource('salinity', {
+        type: 'raster',
+        tiles: [
+          'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+        ],
+        tileSize: 256
+      });
+
+      map.addLayer({
+        id: 'salinity-layer',
+        type: 'raster',
+        source: 'salinity',
+        paint: {
+          'raster-opacity': 0.3
+        }
+      });
+
+      salinityLayerAdded = true;
+    }
+  } else {
+    if (map.getLayer('salinity-layer')) {
+      map.removeLayer('salinity-layer');
+      map.removeSource('salinity');
+    }
+    salinityLayerAdded = false;
+  }
+});
+
+// HYDROLOGICAL OVERLAY (fake heat visual layer)
+document.getElementById("layerHydro").addEventListener("change", (e) => {
+  if (e.target.checked) {
+    map.setPaintProperty('water', 'fill-color', '#00B3FF');
+  } else {
+    map.setPaintProperty('water', 'fill-color', '#3b9ddd');
+  }
+});

@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bakhaw AI GIS Interface</title>
+  <title>Bakhaw AI GIS (Leaflet)</title>
 
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
   <link rel="stylesheet" href="style.css"/>
 </head>
 
@@ -19,22 +21,8 @@
   <p>Toggle ecological intelligence layers</p>
 
   <div class="layers">
-
-    <label>
-      <input type="checkbox" id="layerMangrove" checked>
-      Mangrove Points
-    </label>
-
-    <label>
-      <input type="checkbox" id="layerSalinity" checked>
-      Salinity Proxy Layer
-    </label>
-
-    <label>
-      <input type="checkbox" id="layerHydro">
-      Hydrological Influence
-    </label>
-
+    <label><input type="checkbox" id="layerMangrove" checked> Mangrove Points</label>
+    <label><input type="checkbox" id="layerSalinity" checked> Salinity Proxy</label>
   </div>
 
   <p id="info">Click map for species analysis</p>
@@ -51,7 +39,6 @@
 
   <div class="inspector-body">
     <p id="speciesInfo"></p>
-
     <div class="meta">
       <div><strong>Salinity:</strong> <span id="salinity"></span></div>
       <div><strong>Status:</strong> Suitable Ecological Zone</div>
@@ -59,7 +46,9 @@
   </div>
 </div>
 
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script src="app.js"></script>
 
 <script>

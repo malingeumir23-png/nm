@@ -1,151 +1,91 @@
-:root {
-  --green: #0B3D2E;
-  --dark: #0f1110;
-  --panel: rgba(0,0,0,0.55);
-  --yellow: #FFCC00;
-  --white: #ffffff;
-  --muted: #b8b8b8;
-}
-
-/* GLOBAL */
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Arial;
-  background: radial-gradient(circle at top, #145c42, var(--green));
-  color: var(--white);
+  font-family: system-ui;
+  background: linear-gradient(135deg, #ffd1dc, #ff69b4);
+  color: #2b2b2b;
 }
 
-/* APP LAYOUT */
-.app {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  height: 100vh;
+/* soft glow background */
+.bg-glow {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top, #ffb6c1, transparent 60%);
+  z-index: -1;
 }
 
-/* SIDEBAR */
-.sidebar {
-  background: var(--panel);
-  backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(255,204,0,0.2);
+.container {
+  max-width: 900px;
+  margin: auto;
   padding: 20px;
 }
 
-/* BRAND */
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 25px;
+/* HEADER */
+header {
+  text-align: center;
+  padding: 20px;
+  color: white;
 }
 
-.logo {
-  width: 40px;
-  height: 40px;
-  border: 2px solid var(--yellow);
-  border-radius: 50%;
+header h1 {
+  font-size: 32px;
 }
 
-.brand h1 {
-  margin: 0;
-  font-size: 18px;
-  color: var(--yellow);
-  letter-spacing: 2px;
+/* PANELS */
+.panel, .result-box, .species-box {
+  background: rgba(255,255,255,0.85);
+  border-radius: 18px;
+  padding: 18px;
+  margin: 15px 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  backdrop-filter: blur(8px);
 }
 
-.brand p {
-  margin: 0;
-  font-size: 12px;
-  color: var(--muted);
-}
-
-/* INPUT */
-.inputBox label {
-  font-size: 12px;
-  color: var(--muted);
-}
-
+/* INPUTS */
 input {
   width: 100%;
   padding: 10px;
   margin: 6px 0 12px;
-  background: rgba(0,0,0,0.4);
-  border: 1px solid rgba(255,204,0,0.3);
-  color: white;
-  border-radius: 8px;
+  border-radius: 10px;
+  border: 1px solid #ff69b4;
   outline: none;
 }
 
+/* BUTTON */
 button {
   width: 100%;
-  padding: 11px;
-  background: var(--yellow);
+  padding: 12px;
   border: none;
-  font-weight: 600;
+  border-radius: 12px;
+  background: #ff1493;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
-  border-radius: 8px;
   transition: 0.2s;
 }
 
 button:hover {
-  transform: translateY(-2px);
+  background: #ff69b4;
 }
 
-/* MAIN */
-.main {
-  padding: 25px;
-  display: grid;
-  gap: 20px;
+/* OUTPUT */
+#output {
+  font-size: 18px;
+  font-weight: bold;
 }
 
-/* CARDS */
-.card {
-  background: rgba(0,0,0,0.45);
-  border: 1px solid rgba(255,204,0,0.15);
-  border-radius: 16px;
-  padding: 18px;
-  backdrop-filter: blur(10px);
-}
-
-.hero {
-  border-left: 5px solid var(--yellow);
-}
-
-h2 {
-  margin-top: 0;
-  color: var(--yellow);
-}
-
-/* RESULT */
-.result {
-  font-size: 15px;
-  color: var(--white);
-}
-
-/* SPECIES GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.tile {
-  padding: 14px;
+/* SPECIES CARDS */
+.species-card {
+  background: white;
+  padding: 12px;
   border-radius: 12px;
-  border: 1px solid rgba(255,204,0,0.25);
-  background: rgba(255,255,255,0.03);
+  margin-top: 10px;
   cursor: pointer;
-  transition: 0.25s;
-  text-align: center;
+  transition: 0.2s;
+  border-left: 6px solid #ff69b4;
 }
 
-.tile:hover {
-  background: var(--yellow);
-  color: black;
-  transform: translateY(-3px);
-}
-
-.note {
-  margin-top: 20px;
-  font-size: 11px;
-  color: var(--muted);
+.species-card:hover {
+  transform: scale(1.02);
+  background: #ffe4f1;
 }

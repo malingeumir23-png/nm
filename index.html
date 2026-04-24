@@ -3,59 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bakhaw AI GIS (Leaflet)</title>
+  <title>Bakhaw AI | Mangrove Intelligence</title>
 
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <!-- Mapbox -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
 
   <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
 
-<div id="map"></div>
+<div id="app">
 
-<!-- LEFT PANEL -->
-<div class="panel">
-  <h3>🌿 Bakhaw AI Layers</h3>
-  <p>Toggle ecological intelligence layers</p>
+  <!-- LEFT INFO PANEL -->
+  <div class="panel">
+    <div class="brand">
+      <div class="frame"></div>
+      <h2>Bakhaw AI</h2>
+    </div>
 
-  <div class="layers">
-    <label><input type="checkbox" id="layerMangrove" checked> Mangrove Points</label>
-    <label><input type="checkbox" id="layerSalinity" checked> Salinity Proxy</label>
-  </div>
+    <p class="subtitle">Mangrove Suitability Intelligence</p>
 
-  <p id="info">Click map for species analysis</p>
-</div>
+    <div class="info-box">
+      <p id="info">Click anywhere on the map to analyze site suitability</p>
+    </div>
 
-<!-- RIGHT INSPECTOR -->
-<div id="inspector" class="inspector hidden">
-  <div class="inspector-header">
-    <h2 id="speciesName">Species</h2>
-    <button onclick="closeInspector()">✕</button>
-  </div>
-
-  <img id="speciesImage"/>
-
-  <div class="inspector-body">
-    <p id="speciesInfo"></p>
-    <div class="meta">
-      <div><strong>Salinity:</strong> <span id="salinity"></span></div>
-      <div><strong>Status:</strong> Suitable Ecological Zone</div>
+    <div class="legend">
+      <div><span class="dot suitable"></span> Suitable</div>
+      <div><span class="dot marginal"></span> Marginal</div>
+      <div><span class="dot unsuitable"></span> Unsuitable</div>
     </div>
   </div>
+
+  <!-- MAP -->
+  <div id="map"></div>
+
 </div>
 
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
+<!-- Mapbox -->
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script src="app.js"></script>
-
-<script>
-function closeInspector(){
-  document.getElementById("inspector").classList.add("hidden");
-}
-</script>
 
 </body>
 </html>

@@ -13,15 +13,13 @@ body {
   color: var(--text);
 }
 
-/* MAP */
+/* MAP (Leaflet requires full height) */
 #map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
+  height: 100vh;
   width: 100%;
 }
 
-/* LEFT PANEL */
+/* PANEL */
 .panel {
   position: absolute;
   top: 18px;
@@ -31,8 +29,9 @@ body {
   background: rgba(18,60,46,0.95);
   border: 2px solid var(--accent);
   border-radius: 14px;
-
   padding: 14px;
+
+  z-index: 1000;
 }
 
 .panel h3 {
@@ -45,7 +44,6 @@ body {
   color: var(--muted);
 }
 
-/* LAYER CONTROLS */
 .layers {
   margin-top: 10px;
   display: flex;
@@ -53,17 +51,7 @@ body {
   gap: 8px;
 }
 
-label {
-  font-size: 13px;
-  color: var(--text);
-}
-
-input {
-  accent-color: var(--accent);
-  margin-right: 6px;
-}
-
-/* RIGHT INSPECTOR */
+/* INSPECTOR */
 .inspector {
   position: absolute;
   top: 0;
@@ -74,6 +62,7 @@ input {
   background: rgba(10,40,30,0.97);
   border-left: 3px solid var(--accent);
 
+  z-index: 1000;
   transition: transform 0.25s ease;
 }
 
@@ -101,9 +90,4 @@ input {
 .inspector-body {
   padding: 14px;
   color: var(--muted);
-}
-
-.meta {
-  margin-top: 10px;
-  font-size: 13px;
 }

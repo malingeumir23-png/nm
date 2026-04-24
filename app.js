@@ -14,10 +14,10 @@ function updateValues() {
 
 function runSimulation() {
 
-  const salinity = parseFloat(document.getElementById("salinity").value);
-  const ph = parseFloat(document.getElementById("ph").value);
-  const moisture = parseFloat(document.getElementById("moisture").value);
-  const elevation = parseFloat(document.getElementById("elevation").value);
+  const salinity = +document.getElementById("salinity").value;
+  const ph = +document.getElementById("ph").value;
+  const moisture = +document.getElementById("moisture").value;
+  const elevation = +document.getElementById("elevation").value;
 
   let score = 0;
 
@@ -26,24 +26,22 @@ function runSimulation() {
   if (moisture > 50) score += 25;
   if (elevation < 5) score += 20;
 
-  let result = "";
+  let status = "";
   let species = [];
 
   if (score >= 75) {
-    result = "🟢 Highly Suitable";
+    status = "🟢 Highly Suitable";
     species = ["Rhizophora mucronata", "Avicennia marina"];
   } else if (score >= 50) {
-    result = "🟡 Moderately Suitable";
+    status = "🟡 Moderate Suitability";
     species = ["Sonneratia alba", "Bruguiera gymnorrhiza"];
   } else {
-    result = "🔴 Unsuitable";
-    species = ["Limited mangrove survival"];
+    status = "🔴 Unsuitable";
+    species = ["Low survival probability"];
   }
 
-  document.getElementById("output").innerHTML = `
-    Score: ${score}/100 <br/>
-    Status: ${result}
-  `;
+  document.getElementById("output").innerHTML =
+    `Score: ${score}/100<br>${status}`;
 
   renderSpecies(species);
 }
@@ -56,10 +54,7 @@ function renderSpecies(list) {
     const div = document.createElement("div");
     div.className = "species-card";
 
-    div.innerHTML = `
-      🌿 <b>${name}</b><br/>
-      <small>Click to view images</small>
-    `;
+    div.innerHTML = `🌿 <b>${name}</b><br><small>Tap to view images</small>`;
 
     div.onclick = () => {
       window.open(

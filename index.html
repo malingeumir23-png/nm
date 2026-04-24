@@ -3,46 +3,72 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bakhaw AI | Mangrove Intelligence</title>
-
-  <!-- Mapbox -->
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+  <title>Bakhaw AI Dashboard</title>
 
   <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
 
-<div id="app">
+<div class="container">
 
-  <!-- LEFT INFO PANEL -->
-  <div class="panel">
-    <div class="brand">
-      <div class="frame"></div>
-      <h2>Bakhaw AI</h2>
+  <!-- HEADER -->
+  <div class="header">
+    <h1>BAKHAW AI</h1>
+    <p>Mangrove Suitability Intelligence System</p>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="grid">
+
+    <!-- INPUT PANEL -->
+    <div class="card">
+      <h2>Field Scan</h2>
+
+      <label>Latitude</label>
+      <input id="lat" placeholder="e.g. 7.07"/>
+
+      <label>Longitude</label>
+      <input id="lon" placeholder="e.g. 125.60"/>
+
+      <button onclick="runScan()">Analyze Site</button>
+
+      <p class="hint">Click analyze to get species recommendation</p>
     </div>
 
-    <p class="subtitle">Mangrove Suitability Intelligence</p>
+    <!-- RESULT PANEL -->
+    <div class="card highlight">
+      <h2>Recommendation</h2>
 
-    <div class="info-box">
-      <p id="info">Click anywhere on the map to analyze site suitability</p>
+      <div id="result">
+        Awaiting input...
+      </div>
     </div>
 
-    <div class="legend">
-      <div><span class="dot suitable"></span> Suitable</div>
-      <div><span class="dot marginal"></span> Marginal</div>
-      <div><span class="dot unsuitable"></span> Unsuitable</div>
+  </div>
+
+  <!-- SPECIES PANEL -->
+  <div class="card full">
+    <h2>Species Database</h2>
+
+    <div class="species-grid">
+
+      <div class="species" onclick="openSpecies('Rhizophora mucronata')">
+        Rhizophora mucronata
+      </div>
+
+      <div class="species" onclick="openSpecies('Avicennia marina')">
+        Avicennia marina
+      </div>
+
+      <div class="species" onclick="openSpecies('Sonneratia alba')">
+        Sonneratia alba
+      </div>
+
     </div>
   </div>
 
-  <!-- MAP -->
-  <div id="map"></div>
-
 </div>
 
-<!-- Mapbox -->
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script src="app.js"></script>
-
 </body>
 </html>

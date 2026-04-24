@@ -1,3 +1,17 @@
+function updateValues() {
+  document.getElementById("salinityVal").innerText =
+    document.getElementById("salinity").value;
+
+  document.getElementById("phVal").innerText =
+    document.getElementById("ph").value;
+
+  document.getElementById("moistureVal").innerText =
+    document.getElementById("moisture").value;
+
+  document.getElementById("elevationVal").innerText =
+    document.getElementById("elevation").value;
+}
+
 function runSimulation() {
 
   const salinity = parseFloat(document.getElementById("salinity").value);
@@ -5,7 +19,6 @@ function runSimulation() {
   const moisture = parseFloat(document.getElementById("moisture").value);
   const elevation = parseFloat(document.getElementById("elevation").value);
 
-  // SIMPLE SCORING MODEL (fast, no lag)
   let score = 0;
 
   if (salinity > 20 && salinity < 45) score += 30;
@@ -40,7 +53,6 @@ function renderSpecies(list) {
   container.innerHTML = "";
 
   list.forEach(name => {
-
     const div = document.createElement("div");
     div.className = "species-card";
 

@@ -1,82 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<title>Bakhaw AI Mobile</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bakhaw AI Dashboard</title>
 
-<!-- PWA-style mobile feel -->
-<meta name="theme-color" content="#ff69b4">
+  <!-- SORA FONT -->
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-<!-- Sora Font -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 
+<div class="bg"></div>
+
 <div class="app">
 
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div>
-      <h1>🌸 Bakhaw AI</h1>
-      <p>Mobile Simulation Engine</p>
-    </div>
-  </div>
+  <header>
+    <h1>Bakhaw AI</h1>
+    <p>Mangrove Suitability Simulation</p>
+  </header>
 
-  <!-- MAIN CARD -->
-  <div class="card">
+  <!-- SLIDERS (glass cards) -->
+  <div class="grid">
 
-    <h2>Environmental Controls</h2>
-
-    <!-- SLIDERS -->
-    <div class="control">
-      <label>Salinity (EC)</label>
-      <input type="range" id="salinity" min="0" max="50" value="25" oninput="updateValues()">
-      <span id="salinityVal">25</span>
+    <div class="card glass">
+      <label>Salinity</label>
+      <input type="range" min="0" max="100" value="50" id="salinity">
+      <span id="salinityVal">50</span>
     </div>
 
-    <div class="control">
-      <label>Soil pH</label>
-      <input type="range" id="ph" min="3" max="10" step="0.1" value="7" oninput="updateValues()">
-      <span id="phVal">7</span>
+    <div class="card glass">
+      <label>Redox</label>
+      <input type="range" min="0" max="100" value="50" id="redox">
+      <span id="redoxVal">50</span>
     </div>
 
-    <div class="control">
-      <label>Moisture %</label>
-      <input type="range" id="moisture" min="0" max="100" value="60" oninput="updateValues()">
-      <span id="moistureVal">60</span>
+    <div class="card glass">
+      <label>Moisture</label>
+      <input type="range" min="0" max="100" value="50" id="moisture">
+      <span id="moistureVal">50</span>
     </div>
 
-    <div class="control">
-      <label>Elevation (m)</label>
-      <input type="range" id="elevation" min="0" max="20" value="3" oninput="updateValues()">
-      <span id="elevationVal">3</span>
+    <div class="card glass result">
+      <h3>Recommended Species</h3>
+      <p id="species">—</p>
+      <button id="searchBtn">View Image</button>
     </div>
 
-    <button onclick="runSimulation()">RUN SIMULATION</button>
-
-  </div>
-
-  <!-- RESULT -->
-  <div class="card result">
-    <h2>Result</h2>
-    <div id="output">Adjust sliders to begin</div>
-  </div>
-
-  <!-- SPECIES -->
-  <div class="card">
-    <h2>Species</h2>
-    <div id="speciesList"></div>
   </div>
 
 </div>
 
 <script src="app.js"></script>
-
 </body>
 </html>

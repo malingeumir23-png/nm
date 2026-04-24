@@ -1,56 +1,73 @@
-mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
+// --------------------
+// INIT MAP (LEAFLET)
+// --------------------
+const map = L.map('map').setView([7.07, 125.6], 10);
 
-const map = new mapboxgl.Map({
-  container: 'map',
-  style: 'mapbox://styles/mapbox/satellite-streets-v12',
-  center: [125.6, 7.07],
-  zoom: 10
-});
+// OpenStreetMap tiles (FREE)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 
+// --------------------
 // DATA
+// --------------------
 let mangroveData = [];
+let markers = [];
 
 // LOAD DATA
 fetch('data/mangrove_points.json')
   .then(res => res.json())
   .then(data => {
     mangroveData = data;
+    renderMangroves();
   });
 
-// MARKERS STORAGE
-let markers = [];
-
-// CREATE MARKERS
+// --------------------
+// MANGROVE MARKERS
+// --------------------
 function renderMangroves() {
-  mangroveData.forEach(p => {
-    const el = document.createElement('div');
-    el.style.width = "10px";
-    el.style.height = "10px";
-    el.style.background = "#FFCC00";
-    el.style.borderRadius = "50%";
+  clearMarkers();
 
-    const marker = new mapboxgl.Marker(el)
-      .setLngLat([p.lon, p.lat])
-      .addTo(map);
+  mangroveData.forEach(p => {
+    const marker = L.circleMarker([p.lat, p.lon], {
+      radius: 6,
+      color: "#FFCC00",
+      fillColor: "#FFCC00",
+      fillOpacity: 0.9
+    }).addTo(map);
+
+    marker.on('click', () => openInspector(p));
 
     markers.push(marker);
   });
 }
 
-// CLEAR MARKERS
 function clearMarkers() {
-  markers.forEach(m => m.remove());
+  markers.forEach(m => map.removeLayer(m));
   markers = [];
 }
 
-// INITIAL RENDER
-map.on('load', () => {
-  renderMangroves();
-});
+// --------------------
+// INSPECTOR (OPTION A + C)
+// --------------------
+function openInspector(data) {
+  document.getElementById("inspector").classList.remove("hidden");
 
-// CLICK INTERACTION (UNCHANGED LOGIC + INSPECTOR)
+  document.getElementById("speciesName").innerText = data.species;
+  document.getElementById("speciesInfo").innerText =
+    "Mangrove species adapted to intertidal coastal ecosystems with salinity tolerance.";
+
+  document.getElementById("salinity").innerText = data.salinity;
+
+  document.getElementById("speciesImage").src =
+    "https://upload.wikimedia.org/wikipedia/commons/5/5f/Mangrove_forest.jpg";
+}
+
+// --------------------
+// MAP CLICK (nearest logic preserved)
+// --------------------
 map.on('click', (e) => {
-  const { lng, lat } = e.lngLat;
+  const { lat, lng } = e.latlng;
 
   let closest = null;
   let minDist = Infinity;
@@ -66,71 +83,29 @@ map.on('click', (e) => {
     }
   });
 
-  if (!closest) return;
-
-  document.getElementById("inspector").classList.remove("hidden");
-
-  document.getElementById("speciesName").innerText = closest.species;
-  document.getElementById("speciesInfo").innerText =
-    "Mangrove species adapted to intertidal coastal ecosystems.";
-
-  document.getElementById("salinity").innerText = closest.salinity;
-
-  document.getElementById("speciesImage").src =
-    "https://upload.wikimedia.org/wikipedia/commons/5/5f/Mangrove_forest.jpg";
+  if (closest) openInspector(closest);
 });
 
-// -------------------------
-// LAYER CONTROLS (NEW SYSTEM)
-// -------------------------
-
+// --------------------
+// LAYER CONTROLS
+// --------------------
 document.getElementById("layerMangrove").addEventListener("change", (e) => {
-  if (e.target.checked) {
-    renderMangroves();
-  } else {
-    clearMarkers();
-  }
+  if (e.target.checked) renderMangroves();
+  else clearMarkers();
 });
 
-// SALINITY LAYER (visual proxy overlay)
-let salinityLayerAdded = false;
+// Fake salinity overlay (visual heat layer)
+let salinityLayer = null;
 
 document.getElementById("layerSalinity").addEventListener("change", (e) => {
   if (e.target.checked) {
-    if (!salinityLayerAdded) {
-      map.addSource('salinity', {
-        type: 'raster',
-        tiles: [
-          'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
-        ],
-        tileSize: 256
-      });
-
-      map.addLayer({
-        id: 'salinity-layer',
-        type: 'raster',
-        source: 'salinity',
-        paint: {
-          'raster-opacity': 0.3
-        }
-      });
-
-      salinityLayerAdded = true;
-    }
+    salinityLayer = L.circle([7.07, 125.6], {
+      radius: 30000,
+      color: "#00B3FF",
+      fillColor: "#00B3FF",
+      fillOpacity: 0.2
+    }).addTo(map);
   } else {
-    if (map.getLayer('salinity-layer')) {
-      map.removeLayer('salinity-layer');
-      map.removeSource('salinity');
-    }
-    salinityLayerAdded = false;
-  }
-});
-
-// HYDROLOGICAL OVERLAY (fake heat visual layer)
-document.getElementById("layerHydro").addEventListener("change", (e) => {
-  if (e.target.checked) {
-    map.setPaintProperty('water', 'fill-color', '#00B3FF');
-  } else {
-    map.setPaintProperty('water', 'fill-color', '#3b9ddd');
+    if (salinityLayer) map.removeLayer(salinityLayer);
   }
 });

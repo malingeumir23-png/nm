@@ -1,69 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Bakhaw AI System</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bakhaw AI GIS Interface</title>
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
 
-<div class="layout">
+<div id="map"></div>
 
-  <!-- INPUT -->
-  <div class="panel input">
-    <h2>Environmental Inputs</h2>
+<!-- LEFT PANEL -->
+<div class="panel">
+  <h3>🌿 Bakhaw AI Layers</h3>
+  <p>Toggle ecological intelligence layers</p>
 
-    <label>Elevation</label>
-    <input id="elevation" type="range" min="0" max="10" step="0.1" oninput="runModel()">
+  <div class="layers">
 
-    <label>Soil pH</label>
-    <input id="ph" type="range" min="4" max="9" step="0.1" oninput="runModel()">
+    <label>
+      <input type="checkbox" id="layerMangrove" checked>
+      Mangrove Points
+    </label>
 
-    <label>Salinity</label>
-    <input id="salinity" type="range" min="0" max="40" step="1" oninput="runModel()">
+    <label>
+      <input type="checkbox" id="layerSalinity" checked>
+      Salinity Proxy Layer
+    </label>
 
-    <label>Moisture</label>
-    <input id="moisture" type="range" min="0" max="100" step="1" oninput="runModel()">
-
-    <div id="values"></div>
-  </div>
-
-  <!-- OUTPUT -->
-  <div class="panel output">
-
-    <h2>Model Output</h2>
-
-    <div class="card">
-      <p>Hydrological Prior Index</p>
-      <h3 id="hpi"></h3>
-    </div>
-
-    <div class="card highlight">
-      <p>CSI</p>
-      <h1 id="csi"></h1>
-    </div>
-
-    <div class="card">
-      <p>Classification</p>
-      <h2 id="class"></h2>
-    </div>
-
-    <div class="card">
-      <p>Confidence</p>
-      <h3 id="conf"></h3>
-    </div>
-
-    <div class="card">
-      <p>Recommended Species</p>
-      <div id="species"></div>
-    </div>
+    <label>
+      <input type="checkbox" id="layerHydro">
+      Hydrological Influence
+    </label>
 
   </div>
 
+  <p id="info">Click map for species analysis</p>
 </div>
 
+<!-- RIGHT INSPECTOR -->
+<div id="inspector" class="inspector hidden">
+  <div class="inspector-header">
+    <h2 id="speciesName">Species</h2>
+    <button onclick="closeInspector()">✕</button>
+  </div>
+
+  <img id="speciesImage"/>
+
+  <div class="inspector-body">
+    <p id="speciesInfo"></p>
+
+    <div class="meta">
+      <div><strong>Salinity:</strong> <span id="salinity"></span></div>
+      <div><strong>Status:</strong> Suitable Ecological Zone</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
 <script src="app.js"></script>
+
+<script>
+function closeInspector(){
+  document.getElementById("inspector").classList.add("hidden");
+}
+</script>
+
 </body>
 </html>

@@ -3,69 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Bakhaw AI Dashboard</title>
+  <title>Bakhaw AI</title>
 
   <link rel="stylesheet" href="style.css"/>
 </head>
+
 <body>
 
-<div class="container">
+<div class="app">
 
-  <!-- HEADER -->
-  <div class="header">
-    <h1>BAKHAW AI</h1>
-    <p>Mangrove Suitability Intelligence System</p>
-  </div>
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>Bakhaw AI</h1>
+        <p>Ecological Intelligence System</p>
+      </div>
+    </div>
 
-  <!-- MAIN GRID -->
-  <div class="grid">
-
-    <!-- INPUT PANEL -->
-    <div class="card">
-      <h2>Field Scan</h2>
-
+    <div class="inputBox">
       <label>Latitude</label>
-      <input id="lat" placeholder="e.g. 7.07"/>
+      <input id="lat" placeholder="7.07"/>
 
       <label>Longitude</label>
-      <input id="lon" placeholder="e.g. 125.60"/>
+      <input id="lon" placeholder="125.60"/>
 
-      <button onclick="runScan()">Analyze Site</button>
-
-      <p class="hint">Click analyze to get species recommendation</p>
+      <button onclick="runScan()">Analyze Ecosystem</button>
     </div>
 
-    <!-- RESULT PANEL -->
-    <div class="card highlight">
-      <h2>Recommendation</h2>
-
-      <div id="result">
-        Awaiting input...
-      </div>
+    <div class="note">
+      Click species to view images & ecological data
     </div>
+  </aside>
 
-  </div>
+  <!-- MAIN -->
+  <main class="main">
 
-  <!-- SPECIES PANEL -->
-  <div class="card full">
-    <h2>Species Database</h2>
-
-    <div class="species-grid">
-
-      <div class="species" onclick="openSpecies('Rhizophora mucronata')">
-        Rhizophora mucronata
+    <!-- RESULT CARD -->
+    <section class="card hero">
+      <h2>Suitability Output</h2>
+      <div id="result" class="result">
+        Enter coordinates to begin analysis
       </div>
+    </section>
 
-      <div class="species" onclick="openSpecies('Avicennia marina')">
-        Avicennia marina
+    <!-- SPECIES GRID -->
+    <section class="card">
+      <h2>Mangrove Species Database</h2>
+
+      <div class="grid">
+        <div class="tile" onclick="openSpecies('Rhizophora mucronata')">
+          Rhizophora mucronata
+        </div>
+
+        <div class="tile" onclick="openSpecies('Avicennia marina')">
+          Avicennia marina
+        </div>
+
+        <div class="tile" onclick="openSpecies('Sonneratia alba')">
+          Sonneratia alba
+        </div>
       </div>
+    </section>
 
-      <div class="species" onclick="openSpecies('Sonneratia alba')">
-        Sonneratia alba
-      </div>
-
-    </div>
-  </div>
+  </main>
 
 </div>
 

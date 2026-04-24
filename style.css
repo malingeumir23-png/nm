@@ -5,7 +5,6 @@ body {
   color: #2b2b2b;
 }
 
-/* soft glow background */
 .bg-glow {
   position: fixed;
   width: 100%;
@@ -20,35 +19,31 @@ body {
   padding: 20px;
 }
 
-/* HEADER */
 header {
   text-align: center;
-  padding: 20px;
   color: white;
 }
 
-header h1 {
-  font-size: 32px;
-}
-
-/* PANELS */
+/* PANEL */
 .panel, .result-box, .species-box {
-  background: rgba(255,255,255,0.85);
-  border-radius: 18px;
+  background: rgba(255,255,255,0.88);
   padding: 18px;
   margin: 15px 0;
+  border-radius: 18px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
 }
 
-/* INPUTS */
-input {
+/* SLIDERS */
+input[type="range"] {
   width: 100%;
-  padding: 10px;
-  margin: 6px 0 12px;
-  border-radius: 10px;
-  border: 1px solid #ff69b4;
-  outline: none;
+  accent-color: #ff1493;
+  margin: 8px 0;
+}
+
+span {
+  font-weight: bold;
+  color: #ff1493;
 }
 
 /* BUTTON */
@@ -61,28 +56,21 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 button:hover {
   background: #ff69b4;
 }
 
-/* OUTPUT */
-#output {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* SPECIES CARDS */
+/* SPECIES */
 .species-card {
   background: white;
   padding: 12px;
   border-radius: 12px;
   margin-top: 10px;
   cursor: pointer;
-  transition: 0.2s;
   border-left: 6px solid #ff69b4;
+  transition: 0.2s;
 }
 
 .species-card:hover {
